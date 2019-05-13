@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 const database = require('../data/mssql.dao');
 const assert = require('assert');
 
-const emailValidation = new RegExp('^[^@]+@[^@]+\\.[^@]+$');
 const postalCodeValidator = new RegExp('^[1-9][0-9]{3} ?(?!sa|sd|ss)[a-zA-Z]{2}$');
 const phoneValidator = new RegExp('^06(| |-)[0-9]{8}$');
 const emailValidator = new RegExp('^(([^<>()\\[\\]\\\\.,;:\\s@"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@"]+)*)|(".+"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$');
@@ -17,7 +16,18 @@ module.exports = {
 
     try {
       assert.equal(typeof user.firstName, 'string', 'firstName is required.');
-      assert(emailValidation.test(user.emailAddress), 'Valid email is required.');
+      assert.equal(typeof user.lastName, 'string', 'lastName is required.');
+      assert.equal(typeof user.firstName, 'string', 'firstName is required.');
+      assert.equal(typeof user.postalCode, 'string', 'postalCode is required.');
+      assert.equal(typeof user.city, 'string', 'city is required.');
+      assert.equal(typeof user.dateOfBirth, 'string', 'dateOfBirth is required.');
+      assert.equal(typeof user.phoneNumber, 'string', 'phoneNumber is required.');
+      assert.equal(typeof user.emailAddress, 'string', 'emailAddress is required.');
+      assert.equal(typeof user.password, 'string', 'password is required.');
+      assert(emailValidator.test(user.emailAddress), 'Valid email is required.');
+      assert(phoneValidator.test(user.phoneNumber), 'Valid phone number is required.');
+      assert(postalCodeValidator.test(user.postalCode), 'Valid postal code is required.');
+      assert(passwordValidator.test(user.password), 'Valid password is required.');
     } catch (e){
       const errorObject = {
         message: 'Validation fails: ' + ex.toString(),
