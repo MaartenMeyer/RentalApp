@@ -17,7 +17,7 @@ module.exports = {
     try {
       assert.equal(typeof user.firstName, 'string', 'firstName is required.');
       assert.equal(typeof user.lastName, 'string', 'lastName is required.');
-      assert.equal(typeof user.firstName, 'string', 'firstName is required.');
+      assert.equal(typeof user.streetAddress, 'string', 'streetAddress is required.');
       assert.equal(typeof user.postalCode, 'string', 'postalCode is required.');
       assert.equal(typeof user.city, 'string', 'city is required.');
       assert.equal(typeof user.dateOfBirth, 'string', 'dateOfBirth is required.');
@@ -28,7 +28,7 @@ module.exports = {
       assert(phoneValidator.test(user.phoneNumber), 'Valid phone number is required.');
       assert(postalCodeValidator.test(user.postalCode), 'Valid postal code is required.');
       assert(passwordValidator.test(user.password), 'Valid password is required.');
-    } catch (e){
+    } catch (ex){
       const errorObject = {
         message: 'Validation fails: ' + ex.toString(),
         code: 500
@@ -111,6 +111,47 @@ module.exports = {
             }
           })
         }
+      }
+    })
+  },
+
+  validateToken: (req, res, next) => {
+    logger.info('validateToken aangeroepen')
+    // logger.debug(req.headers)
+    const authHeader = req.headers.authorization
+    if (!authHeader) {
+      errorObject = {
+        message: 'Authorization header missing!',
+        code: 401
+      }
+      logger.warn('Validate token failed: ', errorObject.message)
+      return next(errorObject)
+    }
+    const token = authHeader.substring(7, authHeader.length)
+
+    jwt.verify(token, 'secretkey', (err, payload) => {
+      if (err) {
+        errorObject = {
+          message: 'not authorized',
+          code: 401
+        }
+        logger.warn('Validate token failed: ', errorObject.message)
+        next(errorObject)
+      }
+      logger.trace('payload', payload)
+      if (payload.data && payload.data.UserId) {
+        logger.debug('token is valid', payload)
+        // User heeft toegang. Voeg UserId uit payload toe aan
+        // request, voor ieder volgend endpoint.
+        req.userId = payload.data.UserId
+        next()
+      } else {
+        errorObject = {
+          message: 'UserId is missing!',
+          code: 401
+        }
+        logger.warn('Validate token failed: ', errorObject.message)
+        next(errorObject)
       }
     })
   },
