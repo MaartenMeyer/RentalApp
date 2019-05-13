@@ -11,7 +11,7 @@ module.exports = {
     const apartment = req.body;
     logger.info(apartment);
     try {
-      assert.equal(typeof apartment.street, 'string', 'apartment.street is required.' )
+      assert.equal(typeof apartment.streetAddress, 'string', 'apartment.street is required.' )
     } catch (e) {
       const errorObject = {
         message: e.toString(),
