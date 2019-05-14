@@ -12,7 +12,7 @@ router.delete('/:apartmentId', AuthController.validateToken, ApartmentController
 
 router.post('/:apartmentId/reservations/', AuthController.validateToken, ReservationController.createReservation);
 router.get('/:apartmentId/reservations/', ReservationController.getAllReservations);
-//router.get('/:reservationId', ReservationController.getReservationById);
+router.get('/:apartmentId/reservations/:reservationId', ReservationController.getReservationById);
 //router.delete('/:reservationId', AuthController.validateToken, ReservationController.deleteApartmentById);
 //router.put('/:reservationId', AuthController.validateToken, ReservationController.updateReservationById);
 

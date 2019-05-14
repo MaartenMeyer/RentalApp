@@ -16,6 +16,7 @@ module.exports = {
     try {
       assert.equal(typeof reservation.startDate, 'string', 'reservation.startDate is required.');
       assert.equal(typeof reservation.endDate, 'string', 'reservation.endDate is required.');
+      assert.equal(typeof reservation.status, 'string', 'reservation.status is required.');
     } catch (e) {
       const errorObject = {
         message: e.toString(),
@@ -67,9 +68,8 @@ module.exports = {
     })
   },
 
-
   getAllReservations: function(req, res, next){
-    logger.info('Get /api/apartments/:apartmentId/reservations/ called');
+    logger.info('Get /api/apartments/:apartmentId/reservations called');
 
     const id = req.params.apartmentId;
 
@@ -85,13 +85,48 @@ module.exports = {
         next(errorObject)
       }
       if (rows) {
-        res.status(200).json({ result: rows.recordset })
+        if(rows.recordset.length > 0){
+          res.status(200).json({ result: rows.recordset })
+        }else{
+          const errorObject = {
+            message: 'No reservations found',
+            code: 404
+          }
+          next(errorObject);
+        }
       }
     })
   },
 
   getReservationById: function(req, res, next){
+    logger.info('Get /api/apartments/:apartmentId/reservations/:reservationId called');
 
+    const apartmentId = req.params.apartmentId;
+    const reservationId = req.params.reservationId;
+
+    const query =
+      `SELECT * FROM Reservation WHERE Reservation.ReservationId=${reservationId} AND Reservation.ApartmentId=${apartmentId};`
+
+    database.executeQuery(query, (err, rows) => {
+      if (err) {
+        const errorObject = {
+          message: 'Fout in database.',
+          code: 500
+        }
+        next(errorObject)
+      }
+      if (rows) {
+        if(rows.recordset.length > 0){
+          res.status(200).json({ result: rows.recordset })
+        }else{
+          const errorObject = {
+            message: 'No reservation found',
+            code: 404
+          }
+          next(errorObject);
+        }
+      }
+    })
   },
 
   deleteReservationById: function(req, res, next){

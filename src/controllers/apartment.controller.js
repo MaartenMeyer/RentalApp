@@ -67,13 +67,21 @@ module.exports = {
         next(errorObject)
       }
       if (rows) {
-        res.status(200).json({ result: rows.recordset })
+        if(rows.recordset.length > 0){
+          res.status(200).json({ result: rows.recordset })
+        }else{
+          const errorObject = {
+            message: 'No apartments found',
+            code: 404
+          }
+          next(errorObject);
+        }
       }
     })
   },
 
   getApartmentById: function(req, res, next) {
-    logger.info('Get /api/apartments/:apartmentId aangeroepen')
+    logger.info('Get /api/apartments/:apartmentId called')
     const id = req.params.apartmentId;
 
     const query = `SELECT * FROM Apartment WHERE ApartmentId=${id};`
@@ -100,11 +108,11 @@ module.exports = {
   },
 
   deleteApartmentById: function(req, res, next) {
-    logger.info('deleteById aangeroepen')
-    const id = req.params.apartmentId;
+    logger.info('Delete /api/apartments/:apartmentId called')
+    const apartmentId = req.params.apartmentId;
     const userId = req.userId;
 
-    const query = `DELETE FROM Apartment WHERE ApartmentId=${id} AND UserId=${userId}`
+    const query = `DELETE FROM Apartment WHERE ApartmentId=${apartmentId} AND UserId=${userId}`
     database.executeQuery(query, (err, rows) => {
       if (err) {
         logger.trace('Could not delete apartment: ', err)
