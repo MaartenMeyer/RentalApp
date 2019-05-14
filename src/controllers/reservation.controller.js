@@ -104,7 +104,7 @@ module.exports = {
     const reservationId = req.params.reservationId;
 
     const query =
-      `SELECT * FROM Reservation WHERE Reservation.ReservationId=${reservationId} AND Reservation.ApartmentId=${apartmentId};`
+      `SELECT * FROM Reservation WHERE Reservation.ReservationId=${reservationId} AND Reservation.ApartmentId=${apartmentId} ;`
 
     database.executeQuery(query, (err, rows) => {
       if (err) {
@@ -163,7 +163,42 @@ module.exports = {
   },
 
   updateReservationById: function(req, res, next){
+    logger.info('Put /api/apartments/:apartmentId/reservations/:reservationId called')
+    const reservationId = req.params.reservationId;
+    const apartmentId = req.params.apartmentId;
+    const userId = req.userId;
 
+    const status = req.body.status;
+    logger.trace('Status: ', status)
+
+    //const query =  `UPDATE Reservation SET Status=${status} WHERE ReservationId=${reservationId} AND UserId=${userId}`
+    //const query = `UPDATE Reservation INNER JOIN Apartment ON Reservation.UserId = Apartment.UserId SET Status=${status} WHERE Reservation.UserId = ${userId} `
+    const query = `UPDATE Reservation SET Reservation.Status=${status} FROM Reservation INNER JOIN Apartment ON Reservation.ApartmentId = Apartment.ApartmentId AND Reservation.UserId = Apartment.UserId WHERE Reservation.UserId=${userId} AND Reservation.ApartmentId=${apartmentId} AND Reservation.ReservationId=${reservationId} `
+    database.executeQuery(query, (err, rows) => {
+      if (err) {
+        logger.trace('Could not update reservation: ', err)
+        const errorObject = {
+          message: 'Error in database',
+          code: 500
+        }
+        next(errorObject)
+
+      }
+      if (rows) {
+        if (rows.rowsAffected[0] === 0) {
+          const msg = 'Reservation not found or not authorized to update this reservation';
+          logger.trace(msg)
+          const errorObject = {
+            message: msg,
+            code: 401
+          }
+          next(errorObject)
+        } else {
+          res.status(200);
+          res.send('Reservation updated!');
+        }
+      }
+    })
   }
 
 
