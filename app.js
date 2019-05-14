@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const apartmentRoutes = require('./src/routes/apartment.routes');
 const authenticationRoutes = require('./src/routes/authentication.routes');
+const reservationRoutes = require('./src/routes/reservation.routes');
 const logger = require('./src/config/config').logger
 
 const app = express();
@@ -20,6 +21,7 @@ app.all('*', (req, res, next) => {
 
 app.use('/api/apartments', apartmentRoutes);
 app.use('/api', authenticationRoutes);
+app.use('/api/apartments/:id/reservations', reservationRoutes);
 
 app.all('*', (req, res, next) => {
   const { method, url } = req
