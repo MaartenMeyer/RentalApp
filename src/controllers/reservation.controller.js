@@ -130,6 +130,36 @@ module.exports = {
   },
 
   deleteReservationById: function(req, res, next){
+    logger.info('Delete /api/apartments/:apartmentId/reservations/:reservationId called')
+    const reservationId = req.params.reservationId;
+    const userId = req.userId;
+
+    const query = `DELETE FROM Reservation WHERE ReservationId=${reservationId} AND UserId=${userId}`
+    database.executeQuery(query, (err, rows) => {
+      if (err) {
+        logger.trace('Could not delete apartment: ', err)
+        const errorObject = {
+          message: 'Error in database',
+          code: 500
+        }
+        next(errorObject)
+
+      }
+      if (rows) {
+        if (rows.rowsAffected[0] === 0) {
+          const msg = 'Reservation not found or not authorized to delete this reservation';
+          logger.trace(msg)
+          const errorObject = {
+            message: msg,
+            code: 401
+          }
+          next(errorObject)
+        } else {
+          res.status(200);
+          res.send('Reservation deleted!');
+        }
+      }
+    })
 
   },
 
