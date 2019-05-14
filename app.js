@@ -21,7 +21,7 @@ app.all('*', (req, res, next) => {
 
 app.use('/api/apartments', apartmentRoutes);
 app.use('/api', authenticationRoutes);
-app.use('/api/apartments/:id/reservations', reservationRoutes);
+//app.use('/api/apartments/:apartmentId/reservations', reservationRoutes);
 
 app.all('*', (req, res, next) => {
   const { method, url } = req

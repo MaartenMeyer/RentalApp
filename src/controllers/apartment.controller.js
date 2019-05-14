@@ -73,8 +73,8 @@ module.exports = {
   },
 
   getApartmentById: function(req, res, next) {
-    logger.info('Get /api/apartments/id aangeroepen')
-    const id = req.params.id;
+    logger.info('Get /api/apartments/:apartmentId aangeroepen')
+    const id = req.params.apartmentId;
 
     const query = `SELECT * FROM Apartment WHERE ApartmentId=${id};`
     database.executeQuery(query, (err, rows) => {
@@ -101,8 +101,8 @@ module.exports = {
 
   deleteApartmentById: function(req, res, next) {
     logger.info('deleteById aangeroepen')
-    const id = req.params.id
-    const userId = req.userId
+    const id = req.params.apartmentId;
+    const userId = req.userId;
 
     const query = `DELETE FROM Apartment WHERE ApartmentId=${id} AND UserId=${userId}`
     database.executeQuery(query, (err, rows) => {
