@@ -69,7 +69,25 @@ module.exports = {
 
 
   getAllReservations: function(req, res, next){
+    logger.info('Get /api/apartments/:apartmentId/reservations/ called');
 
+    const id = req.params.apartmentId;
+
+    const query =
+      `SELECT * FROM Reservation WHERE Reservation.ApartmentId=${id};`
+
+    database.executeQuery(query, (err, rows) => {
+      if (err) {
+        const errorObject = {
+          message: 'Fout in database.',
+          code: 500
+        }
+        next(errorObject)
+      }
+      if (rows) {
+        res.status(200).json({ result: rows.recordset })
+      }
+    })
   },
 
   getReservationById: function(req, res, next){

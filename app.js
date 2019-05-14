@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const apartmentRoutes = require('./src/routes/apartment.routes');
 const authenticationRoutes = require('./src/routes/authentication.routes');
-const reservationRoutes = require('./src/routes/reservation.routes');
 const logger = require('./src/config/config').logger
 
 const app = express();

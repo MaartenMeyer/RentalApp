@@ -11,7 +11,7 @@ router.delete('/:apartmentId', AuthController.validateToken, ApartmentController
 //router.put('/:apartmentId', AuthController.validateToken. ApartmentController.updateApartmentById);
 
 router.post('/:apartmentId/reservations/', AuthController.validateToken, ReservationController.createReservation);
-router.get('/', ReservationController.getAllReservations);
+router.get('/:apartmentId/reservations/', ReservationController.getAllReservations);
 //router.get('/:reservationId', ReservationController.getReservationById);
 //router.delete('/:reservationId', AuthController.validateToken, ReservationController.deleteApartmentById);
 //router.put('/:reservationId', AuthController.validateToken, ReservationController.updateReservationById);
