@@ -14,6 +14,6 @@ router.post('/:apartmentId/reservations/', AuthController.validateToken, Reserva
 router.get('/:apartmentId/reservations/', ReservationController.getAllReservations);
 router.get('/:apartmentId/reservations/:reservationId', ReservationController.getReservationById);
 router.delete('/:apartmentId/reservations/:reservationId', AuthController.validateToken, ReservationController.deleteReservationById);
-//router.put('/:reservationId', AuthController.validateToken, ReservationController.updateReservationById);
+router.put('/:apartmentId/reservations/:reservationId', AuthController.validateToken, ReservationController.updateReservationById);
 
 module.exports = router;

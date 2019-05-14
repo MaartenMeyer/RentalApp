@@ -16,7 +16,6 @@ module.exports = {
     try {
       assert.equal(typeof reservation.startDate, 'string', 'reservation.startDate is required.');
       assert.equal(typeof reservation.endDate, 'string', 'reservation.endDate is required.');
-      assert.equal(typeof reservation.status, 'string', 'reservation.status is required.');
     } catch (e) {
       const errorObject = {
         message: e.toString(),
@@ -46,7 +45,7 @@ module.exports = {
       "','" +
       reservation.endDate +
       "','" +
-      reservation.status +
+      'INITIAL' +
       "','" +
       req.userId +
       "');"

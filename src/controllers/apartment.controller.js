@@ -125,10 +125,8 @@ module.exports = {
       }
       if (rows) {
         if (rows.rowsAffected[0] === 0) {
-          const msg = 'Apartment not found or not authorized to delete this apartment';
-          logger.trace(msg)
           const errorObject = {
-            message: msg,
+            message: 'Apartment not found or not authorized to delete this apartment',
             code: 401
           }
           next(errorObject)
