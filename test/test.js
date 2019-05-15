@@ -129,6 +129,20 @@ describe('Api Reservation POST', () => {
             done()
         })
   });
+
+  it('Create new reservation with invalid apartmentId', done => {
+    chai.request(server)
+        .post('/api/apartments/0/reservations')
+        .set('Authorization', 'Bearer ' + token)
+        .send({
+          "startDate": "2019-06-10",
+          "endDate": "2019-06-12"
+        })
+        .end(function(err, res, body) {
+            res.should.have.status(500);
+            done()
+        })
+  });
 })
 
 describe('Api Reservation GET', () => {
@@ -137,6 +151,16 @@ describe('Api Reservation GET', () => {
         .get('/api/apartments/1/reservations')
         .end(function(err, res, body) {
           res.should.have.status(200);
+          res.body.should.be.a('object');
+          done()
+    })
+  });
+
+  it('Get all reservations on invalid apartmentId', done => {
+    chai.request(server)
+        .get('/api/apartments/0/reservations')
+        .end(function(err, res, body) {
+          res.should.have.status(404);
           res.body.should.be.a('object');
           done()
     })
@@ -151,4 +175,15 @@ describe('Api Reservation GET', () => {
           done()
     })
   });
+
+  it('Get reservation by invalid id', done => {
+    chai.request(server)
+        .get('/api/apartments/1/reservations/0')
+        .end(function(err, res, body) {
+          res.should.have.status(404);
+          res.body.should.be.a('object');
+          done()
+    })
+  });
+
 })
