@@ -136,7 +136,7 @@ module.exports = {
     const query = `DELETE FROM Reservation WHERE ReservationId=${reservationId} AND UserId=${userId}`
     database.executeQuery(query, (err, rows) => {
       if (err) {
-        logger.trace('Could not delete apartment: ', err)
+        logger.trace('Could not delete reservation: ', err)
         const errorObject = {
           message: 'Error in database',
           code: 500

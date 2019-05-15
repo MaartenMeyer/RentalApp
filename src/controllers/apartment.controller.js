@@ -131,7 +131,8 @@ module.exports = {
           }
           next(errorObject)
         } else {
-          res.status(200).json({ result: rows }) //todo delete success
+          res.status(200);
+          res.send('Apartment deleted!');
         }
       }
     })
