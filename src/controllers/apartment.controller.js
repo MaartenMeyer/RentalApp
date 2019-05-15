@@ -138,6 +138,37 @@ module.exports = {
   },
 
   updateApartmentById: function(req, res, next){
+    logger.info('Put /api/apartments/:apartmentId called')
+    const apartmentId = req.params.apartmentId;
+    const userId = req.userId;
 
+    const apartment= req.body;
+
+    const query = `UPDATE Apartment SET Apartment.Description='${apartment.description}', Apartment.StreetAddress='${apartment.streetAddress}', Apartment.PostalCode='${apartment.postalCode}', Apartment.City='${apartment.city}' WHERE Apartment.UserId=${userId} AND Apartment.ApartmentId=${apartmentId} `
+    database.executeQuery(query, (err, rows) => {
+      if (err) {
+        logger.trace('Could not update : ', err)
+        const errorObject = {
+          message: 'Error in database',
+          code: 500
+        }
+        next(errorObject)
+
+      }
+      if (rows) {
+        if (rows.rowsAffected[0] === 0) {
+          const msg = 'Apartment not found or not authorized to update this apartment';
+          logger.trace(msg)
+          const errorObject = {
+            message: msg,
+            code: 401
+          }
+          next(errorObject)
+        } else {
+          res.status(200);
+          res.send('Apartment updated!');
+        }
+      }
+    })
   }
 }

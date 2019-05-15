@@ -173,7 +173,7 @@ module.exports = {
 
     //const query =  `UPDATE Reservation SET Status=${status} WHERE ReservationId=${reservationId} AND UserId=${userId}`
     //const query = `UPDATE Reservation INNER JOIN Apartment ON Reservation.UserId = Apartment.UserId SET Status=${status} WHERE Reservation.UserId = ${userId} `
-    const query = `UPDATE Reservation SET Reservation.Status=${status} FROM Reservation INNER JOIN Apartment ON Reservation.ApartmentId = Apartment.ApartmentId AND Reservation.UserId = Apartment.UserId WHERE Reservation.UserId=${userId} AND Reservation.ApartmentId=${apartmentId} AND Reservation.ReservationId=${reservationId} `
+    const query = `UPDATE Reservation SET Reservation.Status='${status}' FROM Reservation INNER JOIN Apartment ON Reservation.ApartmentId = Apartment.ApartmentId AND Reservation.UserId = Apartment.UserId WHERE Reservation.UserId=${userId} AND Reservation.ApartmentId=${apartmentId} AND Reservation.ReservationId=${reservationId} `
     database.executeQuery(query, (err, rows) => {
       if (err) {
         logger.trace('Could not update reservation: ', err)
