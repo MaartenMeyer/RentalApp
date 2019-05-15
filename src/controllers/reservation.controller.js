@@ -6,9 +6,6 @@ module.exports = {
   createReservation: function(req, res, next){
     logger.info('Post /api/apartments/:apartmentId/reservations called');
 
-    logger.trace('User id: ', req.userId);
-    logger.trace('Req: ', req);
-
     const id = req.params.apartmentId;
     const reservation = req.body;
 
@@ -49,8 +46,6 @@ module.exports = {
       "','" +
       req.userId +
       "');"
-
-      logger.trace('Query: ', query);
 
     database.executeQuery(query, (err, rows) => {
       if (err) {
@@ -146,10 +141,8 @@ module.exports = {
       }
       if (rows) {
         if (rows.rowsAffected[0] === 0) {
-          const msg = 'Reservation not found or not authorized to delete this reservation';
-          logger.trace(msg)
           const errorObject = {
-            message: msg,
+            message: 'Reservation not found or not authorized to delete this reservation',
             code: 401
           }
           next(errorObject)
@@ -169,7 +162,6 @@ module.exports = {
     const userId = req.userId;
 
     const status = req.body.status;
-    logger.trace('Status: ', status)
 
     //const query =  `UPDATE Reservation SET Status=${status} WHERE ReservationId=${reservationId} AND UserId=${userId}`
     //const query = `UPDATE Reservation INNER JOIN Apartment ON Reservation.UserId = Apartment.UserId SET Status=${status} WHERE Reservation.UserId = ${userId} `
@@ -186,10 +178,8 @@ module.exports = {
       }
       if (rows) {
         if (rows.rowsAffected[0] === 0) {
-          const msg = 'Reservation not found or not authorized to update this reservation';
-          logger.trace(msg)
           const errorObject = {
-            message: msg,
+            message: 'Reservation not found or not authorized to update this reservation',
             code: 401
           }
           next(errorObject)

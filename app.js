@@ -9,18 +9,13 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
-// Generic endpoint handler - voor alle routes
 app.all('*', (req, res, next) => {
-  // logger.info('Generieke afhandeling aangeroepen!')
-  // ES16 deconstructuring
   const { method, url } = req
-  logger.info(`${method} ${url}`)
   next();
 })
 
 app.use('/api/apartments', apartmentRoutes);
 app.use('/api', authenticationRoutes);
-//app.use('/api/apartments/:apartmentId/reservations', reservationRoutes);
 
 app.all('*', (req, res, next) => {
   const { method, url } = req
