@@ -12,7 +12,7 @@ before(() => {
   console.log('before');
 
   const payload = {
-    UserId: 2
+    UserId: 455
   }
   jwt.sign({ data: payload }, 'secretkey', { expiresIn: 2 * 60 }, (err, result) => {
     if (result) {
@@ -72,7 +72,7 @@ describe('Api Apartment GET', () => {
 
   it('Get apartment by id', done => {
     chai.request(server)
-        .get('/api/apartments/1')
+        .get('/api/apartments/1123')
         .end(function(err, res, body) {
           res.should.have.status(200);
           res.body.should.be.a('object');
@@ -104,7 +104,7 @@ describe('Api Apartment GET', () => {
 describe('Api Reservation POST', () => {
   it('Create new reservation and post', done => {
     chai.request(server)
-        .post('/api/apartments/1/reservations')
+        .post('/api/apartments/1123/reservations')
         .set('Authorization', 'Bearer ' + token)
         .send({
           "startDate": "2019-06-10",
@@ -118,7 +118,7 @@ describe('Api Reservation POST', () => {
 
   it('Create new reservation with endDate before startDate', done => {
     chai.request(server)
-        .post('/api/apartments/1/reservations')
+        .post('/api/apartments/1123/reservations')
         .set('Authorization', 'Bearer ' + token)
         .send({
           "startDate": "2019-06-12",
@@ -148,7 +148,7 @@ describe('Api Reservation POST', () => {
 describe('Api Reservation GET', () => {
   it('Get all reservations', done => {
     chai.request(server)
-        .get('/api/apartments/1/reservations')
+        .get('/api/apartments/1123/reservations')
         .end(function(err, res, body) {
           res.should.have.status(200);
           res.body.should.be.a('object');
@@ -168,7 +168,7 @@ describe('Api Reservation GET', () => {
 
   it('Get reservation by id', done => {
     chai.request(server)
-        .get('/api/apartments/1/reservations/1')
+        .get('/api/apartments/1123/reservations/804')
         .end(function(err, res, body) {
           res.should.have.status(200);
           res.body.should.be.a('object');
