@@ -73,10 +73,10 @@ module.exports = {
     database.executeQuery(query, (err, rows) => {
       if (err) {
         const errorObject = {
-          message: 'Fout in database.',
+          message: 'Error in database.',
           code: 500
         }
-        next(errorObject)
+        next(errorObject);
       }
       if (rows) {
         if(rows.recordset.length > 0){
@@ -98,13 +98,12 @@ module.exports = {
     const apartmentId = req.params.apartmentId;
     const reservationId = req.params.reservationId;
 
-    const query =
-      `SELECT * FROM Reservation WHERE Reservation.ReservationId=${reservationId} AND Reservation.ApartmentId=${apartmentId} ;`
+    const query = `SELECT * FROM Reservation WHERE Reservation.ReservationId=${reservationId} AND Reservation.ApartmentId=${apartmentId} ;`
 
     database.executeQuery(query, (err, rows) => {
       if (err) {
         const errorObject = {
-          message: 'Fout in database.',
+          message: 'Error in database.',
           code: 500
         }
         next(errorObject)
@@ -136,7 +135,7 @@ module.exports = {
           message: 'Error in database',
           code: 500
         }
-        next(errorObject)
+        next(errorObject);
 
       }
       if (rows) {
@@ -145,7 +144,7 @@ module.exports = {
             message: 'Reservation not found or not authorized to delete this reservation',
             code: 401
           }
-          next(errorObject)
+          next(errorObject);
         } else {
           res.status(200);
           res.send('Reservation deleted!');
@@ -173,7 +172,7 @@ module.exports = {
           message: 'Error in database',
           code: 500
         }
-        next(errorObject)
+        next(errorObject);
 
       }
       if (rows) {
@@ -182,7 +181,7 @@ module.exports = {
             message: 'Reservation not found or not authorized to update this reservation',
             code: 401
           }
-          next(errorObject)
+          next(errorObject);
         } else {
           res.status(200);
           res.send('Reservation updated!');

@@ -9,14 +9,14 @@ chai.use(chaiHttp);
 let token;
 
 before(() => {
-  console.log('before')
+  console.log('before');
 
   const payload = {
     UserId: 2
   }
   jwt.sign({ data: payload }, 'secretkey', { expiresIn: 2 * 60 }, (err, result) => {
     if (result) {
-      token = result
+      token = result;
     }
   })
 })
@@ -38,7 +38,7 @@ describe('Api Apartment POST', () => {
         })
         .end(function(err, res, body) {
             res.should.have.status(200);
-            done()
+            done();
         })
   });
 
@@ -54,7 +54,7 @@ describe('Api Apartment POST', () => {
         })
         .end(function(err, res, body) {
             res.should.have.status(401);
-            done()
+            done();
         })
   });
 })
@@ -66,7 +66,7 @@ describe('Api Apartment GET', () => {
         .end(function(err, res, body) {
           res.should.have.status(200);
           res.body.should.be.a('object');
-          done()
+          done();
     })
   });
 
@@ -76,7 +76,7 @@ describe('Api Apartment GET', () => {
         .end(function(err, res, body) {
           res.should.have.status(200);
           res.body.should.be.a('object');
-          done()
+          done();
     })
   });
 
@@ -86,7 +86,7 @@ describe('Api Apartment GET', () => {
         .end(function(err, res, body) {
           res.should.have.status(404);
           res.body.should.be.a('object');
-          done()
+          done();
     })
   });
 
@@ -112,7 +112,7 @@ describe('Api Reservation POST', () => {
         })
         .end(function(err, res, body) {
             res.should.have.status(200);
-            done()
+            done();
         })
   });
 
@@ -126,7 +126,7 @@ describe('Api Reservation POST', () => {
         })
         .end(function(err, res, body) {
             res.should.have.status(400);
-            done()
+            done();
         })
   });
 
@@ -140,7 +140,7 @@ describe('Api Reservation POST', () => {
         })
         .end(function(err, res, body) {
             res.should.have.status(500);
-            done()
+            done();
         })
   });
 })
@@ -152,7 +152,7 @@ describe('Api Reservation GET', () => {
         .end(function(err, res, body) {
           res.should.have.status(200);
           res.body.should.be.a('object');
-          done()
+          done();
     })
   });
 
@@ -162,7 +162,7 @@ describe('Api Reservation GET', () => {
         .end(function(err, res, body) {
           res.should.have.status(404);
           res.body.should.be.a('object');
-          done()
+          done();
     })
   });
 
@@ -172,7 +172,7 @@ describe('Api Reservation GET', () => {
         .end(function(err, res, body) {
           res.should.have.status(200);
           res.body.should.be.a('object');
-          done()
+          done();
     })
   });
 
@@ -182,7 +182,7 @@ describe('Api Reservation GET', () => {
         .end(function(err, res, body) {
           res.should.have.status(404);
           res.body.should.be.a('object');
-          done()
+          done();
     })
   });
 })

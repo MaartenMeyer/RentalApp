@@ -44,44 +44,42 @@ module.exports = {
       `; SELECT SCOPE_IDENTITY() AS UserId`
 
     database.executeQuery(query, (err, rows) => {
-      // verwerk error of result
+
       if (err) {
         const errorObject = {
-          message: 'Er ging iets mis in de database.',
+          message: 'Error in database.',
           code: 500
         }
         next(errorObject)
       }
       if (rows) {
-        res.status(200).json({ result: rows.recordset })
+        res.status(200);
+        res.send('User registered!');
       }
     })
   },
 
   loginUser: (req, res, next) => {
-    logger.info('loginUser aangeroepen')
+    logger.info('Post /api/loginUser called')
 
-    // user informatie uit req.body halen
     const user = req.body
-    // Verifieer dat de juiste velden aanwezig zijn. ToDo.
 
-    // SELECT query samenstellen
     const query = `SELECT Password, UserId FROM [DBUser] WHERE EmailAddress='${user.emailAddress}'`
-    // Query uitvoeren en resultaat retourneren.
+
     database.executeQuery(query, (err, rows) => {
-      // verwerk error of result
+
       if (err) {
         const errorObject = {
-          message: 'Er ging iets mis in de database.',
+          message: 'Error in database.',
           code: 500
         }
         next(errorObject)
       }
       if (rows) {
-        // Als we hier zijn:
+
         if (rows.recordset.length === 0 || req.body.password !== rows.recordset[0].Password) {
           const errorObject = {
-            message: 'Geen toegang: email bestaat niet of password is niet correct!',
+            message: 'Access denied: email does not exist or password is incorrect!',
             code: 401
           }
           next(errorObject)
@@ -89,15 +87,13 @@ module.exports = {
           logger.info('Password match, user logged id')
           logger.trace(rows.recordset)
 
-          // Maak de payload, die we in het token stoppen.
-          // De payload kunnen we er bij het verifiëren van het token later weer uithalen.
           const payload = {
             UserId: rows.recordset[0].UserId
           }
           jwt.sign({ data: payload }, 'secretkey', { expiresIn: 60 * 60 }, (err, token) => {
             if (err) {
               const errorObject = {
-                message: 'Kon geen JWT genereren.',
+                message: 'Could not generate JWT.',
                 code: 500
               }
               next(errorObject)
@@ -117,7 +113,7 @@ module.exports = {
 
   validateToken: (req, res, next) => {
     logger.info('validateToken aangeroepen')
-    // logger.debug(req.headers)
+
     const authHeader = req.headers.authorization
     if (!authHeader) {
       errorObject = {
@@ -141,8 +137,7 @@ module.exports = {
       logger.trace('payload', payload)
       if (payload.data && payload.data.UserId) {
         logger.debug('token is valid', payload)
-        // User heeft toegang. Voeg UserId uit payload toe aan
-        // request, voor ieder volgend endpoint.
+
         req.userId = payload.data.UserId
         next()
       } else {
@@ -152,27 +147,6 @@ module.exports = {
         }
         logger.warn('Validate token failed: ', errorObject.message)
         next(errorObject)
-      }
-    })
-  },
-
-  getAll: (req, res, next) => {
-    logger.info('getAll aangeroepen')
-
-    // query samenstellen met user data
-    const query = `SELECT * FROM [DBUser]`
-
-    // Query aanroepen op de database
-    database.executeQuery(query, (err, rows) => {
-      if (err) {
-        const errorObject = {
-          message: 'Er ging iets mis in de database.',
-          code: 500
-        }
-        next(errorObject)
-      }
-      if (rows) {
-        res.status(200).json({ result: rows.recordset })
       }
     })
   }

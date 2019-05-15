@@ -10,7 +10,7 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 
 app.all('*', (req, res, next) => {
-  const { method, url } = req
+  const { method, url } = req;
   next();
 })
 
@@ -18,8 +18,8 @@ app.use('/api/apartments', apartmentRoutes);
 app.use('/api', authenticationRoutes);
 
 app.all('*', (req, res, next) => {
-  const { method, url } = req
-  const errorMessage = `${method} ${url} does not exist.`
+  const { method, url } = req;
+  const errorMessage = `${method} ${url} does not exist.`;
   logger.warn(errorMessage)
   const errorObject = {
     message: errorMessage,

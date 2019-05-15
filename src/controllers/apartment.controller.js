@@ -39,7 +39,7 @@ module.exports = {
     database.executeQuery(query, (err, rows) => {
       if (err) {
         const errorObject = {
-          message: 'Fout in database.',
+          message: 'Error in database.',
           code: 500
         }
         next(errorObject)
@@ -61,10 +61,10 @@ module.exports = {
     database.executeQuery(query, (err, rows) => {
       if (err) {
         const errorObject = {
-          message: 'Fout in database.',
+          message: 'Error in database.',
           code: 500
         }
-        next(errorObject)
+        next(errorObject);
       }
       if (rows) {
         if(rows.recordset.length > 0){
@@ -88,7 +88,7 @@ module.exports = {
     database.executeQuery(query, (err, rows) => {
       if (err) {
         const errorObject = {
-          message: 'Fout in database.',
+          message: 'Error in database.',
           code: 500
         }
         next(errorObject);
@@ -120,7 +120,7 @@ module.exports = {
           message: 'Error in database',
           code: 500
         }
-        next(errorObject)
+        next(errorObject);
 
       }
       if (rows) {
@@ -153,15 +153,13 @@ module.exports = {
           message: 'Error in database',
           code: 500
         }
-        next(errorObject)
+        next(errorObject);
 
       }
       if (rows) {
         if (rows.rowsAffected[0] === 0) {
-          const msg = 'Apartment not found or not authorized to update this apartment';
-          logger.trace(msg)
           const errorObject = {
-            message: msg,
+            message: 'Apartment not found or not authorized to update this apartment',
             code: 401
           }
           next(errorObject)
